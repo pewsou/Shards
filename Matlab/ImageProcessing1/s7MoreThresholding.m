@@ -1,4 +1,4 @@
-%More complex Thresholding
+%More complex Thresholding - calculation of halftones
 close all;
 clear;
 In=imread('anna500x332.tif');
