@@ -6,26 +6,42 @@ import System.Posix
 import Control.Exception
      
 main = do
-    [f] <- getArgs
-    shredFile f
+    b <- getArgs
+    root <- return $ head b
+    c <- return $ tail b
+    processBatch [] b
 ------------------------------------------------------------------------------------------
+processBatch::FilePath->[FilePath]->IO ()
+processBatch root (xs:ts) = do
+         isDir <- doesDirectoryExist (root++xs)
+         print isDir
+         if isDir 
+         then  do
+            files <- getDirectoryContents (root++xs)
+            let properNames = filter (`notElem` [".", ".."]) files
+            processBatch (root++xs++"/") properNames  
+            processBatch root ts 
+         else do
+             shredFile $ root++xs
+             processBatch root ts
+processBatch _ [] = return ()
+
 shredFile::FilePath->IO ()
 shredFile f = do
     fs  <- getFileSize f
-    print $ fromJust fs
     p <- getPermissions f
     setPermissions f $ p {writable = True} 
     withFile f ReadWriteMode $ add fs
     where
         add fs h = do 
-            print $ genString [1..(fromJust fs)] 
             writeInFile h $ genString [1..(fromJust fs)]
             return 0
             hClose h
 
+
 genString::[Integer]->String
 genString [] =  "-" 
-genString (h:xs) =  "s" ++ genString xs
+genString (h:xs) =  "+" ++ genString xs
 
 writeInFile::Handle->String->IO ()
 writeInFile h [] = return ()
