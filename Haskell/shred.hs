@@ -5,7 +5,7 @@ import Data.Maybe
 import System.Posix
 import System.Random
 import Control.Exception
-     
+--import Data.ByteString.Char8 as B     
 main = do
     b <- getArgs
     root <- return $ head b
@@ -60,8 +60,7 @@ fillFileWithChar::FilePath->Handle->Char->Integer->IO ()
 fillFileWithChar f hnd c num 
               |num<=0 = return ()
               |otherwise = do
-                        writeInFile hnd $ pattern
-                        
+                        hPutStr hnd $ pattern
                         fillFileWithChar f hnd c $ num-writeBlockSize
                         return ()
 
