@@ -6,6 +6,7 @@ import System.Posix
 import System.Random
 import Control.Exception
 --import Data.ByteString.Char8 as B     
+
 main = do
     b <- getArgs
     root <- return $ head b
@@ -14,7 +15,7 @@ main = do
 ------------------------------------------------------------------------------------------
 rngr = 1000000
 writeBlockSize=1000000
-pattern=genString [1..writeBlockSize]
+pattern=genString '-' [1..writeBlockSize]
 
 processBatch::FilePath->[FilePath]->IO ()
 processBatch root (xs:ts) = do
@@ -27,41 +28,38 @@ processBatch root (xs:ts) = do
             let properNames = filter (`notElem` [".", ".."]) files
             processBatch (dn++"/") properNames  
             let str = take 10 $ randomRs ('a','z') gen 
-            print dn
-            print str
             processBatch root ts 
-            --renameDirectory dn str
+            renameDirectory dn $ root++"/"++str
          else do
-             shredFile $ dn
+             shredFile root dn
              processBatch root ts
 processBatch _ [] = return ()
 
-shredFile::FilePath->IO ()
-shredFile f = do
+shredFile::String->FilePath->IO ()
+shredFile root f = do
     fs  <- getFileSize f
     p <- getPermissions f
     setPermissions f $ p {writable = True} 
     withBinaryFile f ReadWriteMode $ add fs
     where
         add fs h = do 
-            fillFileWithChar f h ')' (fromJust fs)
-            --writeInFile h $ genString [1..(fromJust fs)]
+            fillFile f h ')' (fromJust fs)
             return 0
             gen <- newStdGen
             let str = take 10 $ randomRs ('a','z') gen 
             hClose h
-            --renameFile f str
+            renameFile (f) (root++"/"++str)
 
-genString::[Integer]->String
-genString [] =  "-" 
-genString (h:xs) =  "+" ++ genString xs
+genString::Char->[Integer]->String
+genString _ [] =  "-" 
+genString c (h:xs) =  [c] ++ genString c xs
 
-fillFileWithChar::FilePath->Handle->Char->Integer->IO ()
-fillFileWithChar f hnd c num 
+fillFile::FilePath->Handle->Char->Integer->IO ()
+fillFile f hnd c num 
               |num<=0 = return ()
               |otherwise = do
                         hPutStr hnd $ pattern
-                        fillFileWithChar f hnd c $ num-writeBlockSize
+                        fillFile f hnd c $ num-writeBlockSize
                         return ()
 
 writeInFile::Handle->String->IO ()
