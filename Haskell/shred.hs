@@ -3,6 +3,7 @@ import System.Environment
 import System.Directory
 import Data.Maybe
 import System.Posix
+import System.Random
 import Control.Exception
      
 main = do
@@ -11,18 +12,27 @@ main = do
     c <- return $ tail b
     processBatch [] b
 ------------------------------------------------------------------------------------------
+rngr = 1000000
+writeBlockSize=1000000
+pattern=genString [1..writeBlockSize]
+
 processBatch::FilePath->[FilePath]->IO ()
 processBatch root (xs:ts) = do
          isDir <- doesDirectoryExist (root++xs)
-         print isDir
+         let dn=(root++xs)
          if isDir 
          then  do
+            gen <- newStdGen
             files <- getDirectoryContents (root++xs)
             let properNames = filter (`notElem` [".", ".."]) files
-            processBatch (root++xs++"/") properNames  
+            processBatch (dn++"/") properNames  
+            let str = take 10 $ randomRs ('a','z') gen 
+            print dn
+            print str
             processBatch root ts 
+            --renameDirectory dn str
          else do
-             shredFile $ root++xs
+             shredFile $ dn
              processBatch root ts
 processBatch _ [] = return ()
 
@@ -31,17 +41,29 @@ shredFile f = do
     fs  <- getFileSize f
     p <- getPermissions f
     setPermissions f $ p {writable = True} 
-    withFile f ReadWriteMode $ add fs
+    withBinaryFile f ReadWriteMode $ add fs
     where
         add fs h = do 
-            writeInFile h $ genString [1..(fromJust fs)]
+            fillFileWithChar f h ')' (fromJust fs)
+            --writeInFile h $ genString [1..(fromJust fs)]
             return 0
+            gen <- newStdGen
+            let str = take 10 $ randomRs ('a','z') gen 
             hClose h
-
+            --renameFile f str
 
 genString::[Integer]->String
 genString [] =  "-" 
 genString (h:xs) =  "+" ++ genString xs
+
+fillFileWithChar::FilePath->Handle->Char->Integer->IO ()
+fillFileWithChar f hnd c num 
+              |num<=0 = return ()
+              |otherwise = do
+                        writeInFile hnd $ pattern
+                        
+                        fillFileWithChar f hnd c $ num-writeBlockSize
+                        return ()
 
 writeInFile::Handle->String->IO ()
 writeInFile h [] = return ()
