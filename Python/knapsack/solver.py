@@ -11,73 +11,6 @@ VALUES=0
 precalccache=dict()
 
 import itertools
-
-def calcValWeight(l):
-    global precalccache
-    w=0
-    v=0
-    f=precalccache[l]
-    if l in precalccache:
-        v=f[VALUES]
-        w=f[WEIGHTS]
-    else:
-        for il in l:
-            slist=[x for x in il ]
-            for i in l:
-                v+=i[VALUES]
-                w+=i[WEIGHTS]
-                f=(v,w)
-    return (v,w)
-
-def optimize1(spairs,items,maxcap):
-    global takenl
-    sumw=0
-    plist=[]
-    cur=0
-    maxval=0
-    
-    for i in spairs:
-        if sumw+i[WEIGHTS]<=maxcap:
-            sumw+=i[WEIGHTS]
-            maxval+=i[VALUES]
-            plist.append(i)
-            cur+=1
-    for i in range(1,len(spairs)+1):
-        l=itertools.combinations(spairs,i)
-
-        for il in l:
-            sw=0
-            sv=0
-            slist=[x for x in il ]
-
-            for ss in slist:
-                sv+=ss[VALUES]
-                sw+=ss[WEIGHTS]
-                if sw>maxcap:
-                    break
-            if sw<=maxcap and sv>maxval:
-                maxval=sv
-                takenl=[]
-                takenl.append((slist,sw,sv))
-
-def optimize4(spairs,items,maxcap):
-    m=[]
-    reg=[]
-
-    for i in xrange(0,items):
-        m.append(0)
-
-    for i in xrange(0,items):
-        reg.append(0)
-        reg[i]=(spairs[i],spairs[i][VALUES]/float(spairs[i][WEIGHTS]))
-    sitems=sorted(reg,key=lambda k:k[1],reverse=True)
-    totval=0
-    for i in sitems:
-        if maxcap-i[0][WEIGHTS]>=0:
-            maxcap-=i[0][WEIGHTS]
-            totval+=i[0][VALUES]
-    print totval
-    return ([],sitems[items-1][0])
     
 def optimize3(spairs,items,maxcap):
     m=[]
@@ -134,60 +67,6 @@ def optimize3(spairs,items,maxcap):
         del m[t-1][0:len(m[t-1])]
     return (r,fin)
     
-def optimize2(spairs,items,maxcap):
-    m=[]
-
-    for i in xrange(0,1):
-        m.append([])
-        for j in xrange(0,maxcap+1):
-            m[i].append(0)
-
-    for i in xrange(1,items+1):
-        m.append([])
-        for j in xrange(0,maxcap+1):
-            m[i].append(0)
-        for j in xrange(0,maxcap+1):
-            if j>=spairs[i-1][WEIGHTS]:
-                m[i][j] = max(m[i-1][ j], m[i-1][ j-spairs[i-1][WEIGHTS]] + spairs[i-1][VALUES])
-                #print 'j='+str(j)
-            else:
-                m[i][j] = m[i-1][j]
-
-    r=[]
-    rw=maxcap
-    for t in xrange(items, 0, -1):
-        added = m[t][maxcap] != m[t-1][maxcap]
-    
-        if added:
-            r.append(spairs[t-1])
-            maxcap -= spairs[t-1][WEIGHTS]
-            
-    return (r,m[items][rw])
-
-    
-def optimize(spairs,items,maxcap):
-    m=[]
-    
-    for i in xrange(0,items+1):
-        m.append([])
-        for j in xrange(0,maxcap+1):
-            m[i].append(0)
-    for i in xrange(1,items):
-        for j in xrange(0,maxcap+1):
-            if j>=spairs[i][WEIGHTS]:
-                m[i][j] = max(m[i-1][ j], m[i-1][ j-spairs[i][WEIGHTS]] + spairs[i][VALUES])
-            else:
-                m[i][j] = m[i-1][j]
-    r=[]
-    rw=maxcap
-    for t in xrange(items-1, 0, -1):
-        added = m[t][maxcap] != m[t-1][maxcap]
-    
-        if added:
-            r.append(spairs[t])
-            maxcap -= spairs[t][WEIGHTS]
-    
-    return (r,m[items-1][rw])
 
 def solveIt(inputData):
     global sortpairs,pairs,takenl
