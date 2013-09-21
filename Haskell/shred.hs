@@ -12,6 +12,7 @@ import Control.Exception
    and renames to then random name
    For directories - it scans all directories, rewrites contained files 
    and renames directories too
+   Usage: Shred <list of files/directories separated by spaces>
 -}
 main = do
     b <- getArgs
