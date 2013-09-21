@@ -7,6 +7,12 @@ import System.Random
 import Control.Exception
 --import Data.ByteString.Char8 as B     
 
+{- This is shredding utility
+   it takes list of files, replaces the contents with some pattern 
+   and renames to then random name
+   For directories - it scans all directories, rewrites contained files 
+   and renames directories too
+-}
 main = do
     b <- getArgs
     root <- return $ head b
@@ -61,14 +67,14 @@ fillFile f hnd c num
                         hPutStr hnd $ pattern
                         fillFile f hnd c $ num-writeBlockSize
                         return ()
-
+{-
 writeInFile::Handle->String->IO ()
 writeInFile h [] = return ()
 writeInFile h (hs:ts) = do
     hPutChar h hs 
     writeInFile h ts 
     return ()      
-
+-}
 getFileSize path = handle (\(SomeException _) -> return $ Just 0) $
   bracket (openBinaryFile path ReadMode) hClose $ \h -> do
     size <- hFileSize h
