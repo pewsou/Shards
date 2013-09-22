@@ -3,43 +3,63 @@
 import sys
 
 def KMP_Match(text, pattern):
-    pattern.strip("\n")
-    tt=len(text)
-    tp=len(pattern)
-    pf=KMP_PrefixFunction(pattern)
-    m=0
+    pat=pattern.strip('\n')
+    te=list(text.strip('\n'))
+    q=0
     i=0
-    print pf
-    while m+i<tt:
-        if pattern[i]==text[m+i]:
-           if i==tp-1:
-              print "match found at "+str(m)
-              return m
-           i=i+1
-        else:
-           m=m+i-pf[i]
-           if pf[i]>-1:
-              i=pf[i]
+    c=0
+    if len(pat)<=2:
+       for j in range(0,len(te)):
+           if pat[i]==te[j]:
+             c=c+1
+             if c==len(pat):
+                 print ":(=> match found at ",j-i+1
+                 return
+             i=i+1
            else:
-              i=0
-    print ":(=>match not found"       
+               c=0
+               i=0
+       print ":(=< match NOT found at all"
+       return
+    pf=KMP_PrefixFunction(pat)
+    te.insert(0,'0')
+    tt=len(te)
+    tp=len(pat)
+    print pf
+    l=range(1,tt)
+
+    for i in l:
+      while q>0 and pat[q+1]!= te[i]:
+        q=pf[q]
+      if pat[q+1]==te[i]:
+           q=q+1
+      if q+1==tp:
+         print ":(=> match found at ",i-tp+1
+         q=pf[q]
+         return
+    print "match not found"  
     pass
         
 
 def KMP_PrefixFunction(pattern):
     m=len(pattern)
-    pf=range(0,m+1)
-    print pattern
+    pf=range(1,m+1)
+    p=list(pattern)
+    p.insert(0,'a')
     pf[0]=0
     pf[1]=0
     k=0
+    for l in range(0,m):
+        pf[l]=0
+
     for q in range(2,m):
-        print q,k
-        while k>0 and pattern[k+1]!=pattern[q]:
+        #print q
+        while k>0 and p[k+1]!=p[q]:
              k=pf[k]
-        if pattern[k+1]==pattern[q]:
+        if p[k+1]==p[q]:
              k=k+1
         pf[q]=k
+
     return pf
     
 def RunTest(inputData):
@@ -48,7 +68,7 @@ def RunTest(inputData):
         chunk = inputData[i:i +2]
         print chunk
         if chunk!=None:
-           #kmpMatch(chunk[1], chunk[0])
+
            KMP_Match(chunk[0], chunk[1])
            #print YAKMP(chunk[0], chunk[1])
     pass    
