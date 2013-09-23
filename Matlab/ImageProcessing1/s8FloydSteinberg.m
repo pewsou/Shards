@@ -4,10 +4,28 @@ In=imread('anna500x332.tif');
 gr=In(1:2:end,1:2:end,1);
 figure;imshow(uint8(gr));
 
-Thresh=90;
+Thresh=128;
 %th=zeros(size(gr));
+A1=size(gr);
+A2=size(gr);
+A3=size(gr);
+A4=size(gr);
+A5=size(gr);
+D1=size(gr);
+D2=size(gr);
+D3=size(gr);
+D4=size(gr);
+D5=size(gr);
 
 %th(1:end,1:end) = 255*(gr(1:end,1:end)>Thresh);
-out=floyd(gr,Thresh);
+A1=floyd(gr,Thresh);figure;imshow(uint8(A1));
+A2=floyd(gr,Thresh);figure;imshow(uint8(A1));
+A3=floyd(gr,Thresh);figure;imshow(uint8(A2));
+A4=floyd(gr,Thresh);figure;imshow(uint8(A3));
+A5=floyd(gr,Thresh);figure;imshow(uint8(A4));
 
-figure;imshow(uint8(out));
+D1=gr-uint8(A1);F1=D1(D1>0);
+D2=A1-A2;F2=D2(D2>0);
+D3=A2-A3;F3=D3(D3>0);
+D4=A3-A4;F4=D4(D4>0);
+D5=A4-A5;F5=D5(D5>0);
