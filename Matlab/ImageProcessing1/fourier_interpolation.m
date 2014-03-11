@@ -1,6 +1,6 @@
 close all;
 clear all;
-A=imread('images/anna500x332.jpg');
+A=imread('image.jpg');
 A=A(:,:,1);
 [M,N]=size(A);
 F1=fft2(A);
