@@ -1,3 +1,4 @@
+%copyright by Boris Vigman 2013-2014
 close all;
 clear;
 In=imread('anna500x332.tif');

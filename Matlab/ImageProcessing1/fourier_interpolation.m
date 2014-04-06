@@ -1,3 +1,4 @@
+%copyright by Boris Vigman 2013-2014
 close all;
 clear all;
 A=imread('image.jpg');

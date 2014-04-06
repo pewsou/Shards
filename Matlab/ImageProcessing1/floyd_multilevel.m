@@ -1,6 +1,7 @@
+%Copyright by Boris Vigman 2013-2014
 function [ out ] = floyd_multilevel( img,glsnum )
 %this algorithm reduces gray levels number from maximum to the provided one
-%receives source image and required number of gray levels (>256)
+%receives source image and required number of gray levels (<256)
 %returns image with reduced number of gray levels
 
 gls=256/glsnum:256/glsnum:256
@@ -23,12 +24,6 @@ out=double(img);
             err(i+1,j)=err(i+1,j)+d*3/8;
             err(i+1,j+1)=err(i+1,j+1)+d/4;
          end
-%         %color = ceil(out(i,j));
-%         d=out(i,j)-color;
-%         out(i,j)=color;
-%         err(i,j+1)=err(i,j+1)+d*3/8;
-%         err(i+1,j)=err(i+1,j)+d*3/8;
-%         err(i+1,j+1)=err(i+1,j+1)+d/4;
      end
 
   end

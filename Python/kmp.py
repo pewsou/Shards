@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+#Copyright by Boris Vigman 2013-2014
 import sys
 
 def KMP_Match(text, pattern):

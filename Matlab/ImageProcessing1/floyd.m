@@ -1,3 +1,4 @@
+%copyright by Boris Vigman 2013-2014
 function [ out ] = floyd( img, th )
 err=zeros(size(img));
 out=double(img);

@@ -1,3 +1,4 @@
+%copyright by Boris Vigman 2013-2014
 close all;
 clear;
 In=imread('anna500x332.tif');
@@ -19,10 +20,10 @@ D5=size(gr);
 
 %th(1:end,1:end) = 255*(gr(1:end,1:end)>Thresh);
 A1=floyd(gr,Thresh);figure;imshow(uint8(A1));
-A2=floyd(gr,Thresh);figure;imshow(uint8(A1));
-A3=floyd(gr,Thresh);figure;imshow(uint8(A2));
-A4=floyd(gr,Thresh);figure;imshow(uint8(A3));
-A5=floyd(gr,Thresh);figure;imshow(uint8(A4));
+A2=floyd(A1,Thresh);figure;imshow(uint8(A2));
+A3=floyd(A2,Thresh);figure;imshow(uint8(A3));
+A4=floyd(A3,Thresh);figure;imshow(uint8(A4));
+A5=floyd(A4,Thresh);figure;imshow(uint8(A5));
 
 D1=gr-uint8(A1);F1=D1(D1>0);
 D2=A1-A2;F2=D2(D2>0);
