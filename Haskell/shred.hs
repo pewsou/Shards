@@ -1,4 +1,4 @@
-—Copyright by Boris Vigman 2013-2014
+—-Copyright by Boris Vigman 2013-2014
 import System.IO as I
 import System.Environment
 import System.Directory
