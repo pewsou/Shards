@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+#Copyright by Boris Vigman 2013-2014
 import array
 import zlib
 
