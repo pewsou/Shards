@@ -1,8 +1,8 @@
-* Namespace:
+# Namespace
 
 SCUD
 
-* Available classes:
+# Available classes
 
 **Linkable** - base class for all elements; implements chaining operations;
 
