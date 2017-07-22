@@ -111,7 +111,7 @@ typedef struct _Prim{
             return rand();
         };
         //returns random number in range (0..1)
-        float randomFloat(){
+        float randomFloat(){ 
             return rand()/((float)RAND_MAX);
         };
         virtual ~SCRng(){};
