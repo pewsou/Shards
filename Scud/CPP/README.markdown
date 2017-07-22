@@ -19,3 +19,4 @@ SCUD
 **LinkableNull** - stub element, discarding all incoming objects;
 
 **LinkableDropper** - element discarding incoming packet based on some criteria. Probabilistic discarding applied by default; can be assigned with weight and/or priority;
+
