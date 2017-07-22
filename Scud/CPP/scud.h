@@ -96,25 +96,7 @@ typedef struct _Prim{
         retCode=SCUD_RC_OK;
     }
 } Schedulable;
-//#ifndef SCUD_CUSTOM_QUEUE_AVAILABLE
-//#include "mutex"
-//    template<typename TSchedulable>class CQueue{
-//    public:
-//        CQueue(){};
-//        void push(){};
-//        
-//        long long size();
-//        virtual ~CQueue(){};
-//    };
-//#else
-//    template<typename TSchedulable>class CQueue{
-//    public:
-//        CQueue(){};
-//        
-//        long long size();
-//        virtual ~CQueue(){};
-//    };
-//#endif
+
 #ifndef SCUD_CUSTOM_RNG_AVAILABLE
 #include <stdlib.h>
 #include <time.h>
@@ -129,7 +111,7 @@ typedef struct _Prim{
             return rand();
         };
         //returns random number in range (0..1)
-        float randomFloat(){
+        float randomFloat(){ 
             return rand()/((float)RAND_MAX);
         };
         virtual ~SCRng(){};
@@ -561,8 +543,6 @@ public:
         SCUD_THROW_EXCEPTION("exit Linkable::linkPredecessor - link exists");
         return SCUD_RC_FAIL_LINK_EXISTS;
     };
-    
-    //virtual Linkable<TSchedulable,Tid>* replace(Linkable<TSchedulable,Tid>*  link)=0;
  
 };
     /*
@@ -1009,10 +989,9 @@ protected:
             if(this->_scheduleEntry(linkId,link,w,pr)){
                 InternalContainer ic(link,w,pr);
                 id2prepended.insert(std::make_pair(linkId, ic));
-                //link->_linkSuccessor(this);
+
                 this->_scheduleFinalizeEntry(linkId,link);
-                //typename Linkable<TSchedulable, Tid>::SchedulingProperties scps(w,pr);
-                //this->_propagateSchedulingProperties(this,scps);
+ 
                 SCUD_PRINT_STR("exit LinkableScheduler::linkPredecessor - OK");
                 res= SCUD_RC_OK;
             }else{
@@ -1068,16 +1047,6 @@ public:
         ;
     };
     bool hasBefore(){
-        /*
-        SCUD_PRINT_STR("enter LinkableScheduler::hasBefore");
-        bool res=false;
-        this->lockerSched.lock();
-        if(this->id2prepended.size()>0){
-            res=true;
-        }
-        this->lockerSched.unlock();
-        SCUD_PRINT_STR("exit LinkableScheduler::hasBefore");
-         */
         return false;
     }
     SCUD_RC push(TSchedulable sch, long long schedulingParam){
