@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace SCUD{
 
-#define SCUD_VERSION "0.1.0"
+#define SCUD_VERSION "0.1.1"
 //#define SCUD_USE_EXCEPTIONS 1
 #define SCUD_MAX_NUMBER_OF_AVAILABLE_PRIORITIES 64
 //#define SCUD_DEBUG_MODE_ENABLED
@@ -183,6 +183,7 @@ template<typename TSchedulable,typename Tid> class LinkableDropper ;
 template<typename TSchedulable,typename Tid> class LinkableQueue;
 template<typename TSchedulable,typename Tid> class LinkableScheduler ;
 template<typename TSchedulable,typename Tid> class LinkableSchedulerPriority;
+template<typename TSchedulable,typename Tid> class LinkableSchedulerNaiveRR;
 template<typename TSchedulable,typename Tid> class LinkableNull;
     /*
      -----------------------------------------------------------------------------
@@ -971,10 +972,12 @@ protected:
         }
         if(link==this){
             SCUD_PRINT_STR("exit LinkableScheduler::linkPredecessor");
+            SCUD_THROW_EXCEPTION("exit LinkableScheduler::linkPredecessor");
             return SCUD_RC_FAIL_SELF_REFERENCING_LINK_DETECTED;
         }
         if(link->hasAfter()){
             SCUD_PRINT_STR("exit LinkableScheduler::linkPredecessor");
+            SCUD_THROW_EXCEPTION("exit LinkableScheduler::linkPredecessor");
             return SCUD_RC_FAIL_LINK_HAS_SUCCESSOR;
         }
         SCUD_RC res=SCUD_RC_OK;
@@ -996,6 +999,7 @@ protected:
                 res= SCUD_RC_OK;
             }else{
                 SCUD_PRINT_STR("exit LinkableScheduler::linkPredecessor - FAIL: could not link");
+                SCUD_THROW_EXCEPTION("exit LinkableScheduler::linkPredecessor - FAIL: could not link");
                 res= SCUD_RC_LINK_FAILED;
             }
         }else{
@@ -1135,18 +1139,18 @@ template<typename TSchedulable,typename Tid> class  LinkableSchedulerNaiveRR:pub
             this->setId(this);
             this->rit=this->id2prepended.begin();
         };
-
         bool canPull(){
             bool res=false;
             SCUD_PRINT_STR("enter LinkableSchedulerNaiveRR::canPull");
             this->lockerLinkable.lock();
             long long entriesCount=this->id2prepended.size();
             if(entriesCount>0){
-                Linkable<TSchedulable,Tid>* l=0;
-                l=this->rit->second.link;
-                if(l){
-                    res=l->canPull();
-                }
+//                Linkable<TSchedulable,Tid>* l=0;
+//                l=this->rit->second.link;
+//                if(l){
+//                    res=l->canPull();
+//                }
+                res=true;
             }else{
                 
             }

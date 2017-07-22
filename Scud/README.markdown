@@ -6,11 +6,10 @@ Objects may be dropped (filtered out). This SW does not depend on non-standard l
 
 * Current version
 
-0.1.0-Alpha
+0.1.1-Alpha
+
 
 * LICENSE
 
 This SW is provided under terms of Affero GPL v3.0 license.
-
-
 
