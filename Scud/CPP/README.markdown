@@ -27,4 +27,5 @@ SCUD
 * unsigned long long schParam; - numerical value used for scheduling; can be set to size of "scheduled" variable, for example, sizeof(int);
 
 **TSchedulable** - generic type for user data;
+
 **Tid** - type of identifier that will be assigned to each element;
