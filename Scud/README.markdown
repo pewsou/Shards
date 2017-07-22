@@ -12,9 +12,5 @@ Objects may be dropped (filtered out). This SW does not depend on non-standard l
 
 This SW is provided under terms of Affero GPL v3.0 license.
 
-* Namespace:
 
-SCUD
 
-* Available classes:
-** SCHelper - a helper class with some auxiliary functions;
