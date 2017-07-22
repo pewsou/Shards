@@ -20,3 +20,11 @@ SCUD
 
 **LinkableDropper** - element discarding incoming packet based on some criteria. Probabilistic discarding applied by default; can be assigned with weight and/or priority;
 
+# Data types
+
+**Linkable<typename TSchedulable,typename Tid>::Queueable** - data stucture carrying user data. Consists of two fields: 
+* TSchedulable scheduled - a data to be routed; 
+* unsigned long long schParam; - numerical value used for scheduling; can be set to size of "scheduled" variable, for example, sizeof(int);
+
+**TSchedulable** - generic type for user data;
+**Tid** - type of identifier that will be assigned to each element;
